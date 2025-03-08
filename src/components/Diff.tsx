@@ -1,48 +1,80 @@
-import React, { PureComponent } from "react";
-import ReactDiffViewer from "react-diff-viewer";
-import Prism from "prismjs";
+import { DiffFile, DiffModeEnum, DiffView } from "@git-diff-view/react";
+import { generateDiffFile } from "@git-diff-view/file";
+import "@git-diff-view/react/styles/diff-view.css";
+import { useEffect, useMemo, useRef } from "react";
 
-const oldCode = `
-const a = 10
-const b = 10
-const c = () => console.log('foo')
-
-if(a > 10) {
-  console.log('bar')
+interface Props {
+    oldText: string;
+    newText: string;
+    lang: string;
 }
 
-console.log('done')
-`;
-const newCode = `
-const a = 10
-const boo = 10
+export default function Diff({ oldText, newText, lang }: Props) {
+    const getDiffFile = () => {
+        try {
+            // Check if texts are identical
+            if (oldText === newText) {
+                return null;
+            }
 
-if(a === 10) {
-  console.log('bar')
-}
-`;
-
-class Diff extends PureComponent {
-    syntaxHighlight = (str: string): any => {
-        if (!str) return;
-        const language = Prism.highlight(
-            str,
-            Prism.languages.javascript,
-            "javascript",
-        );
-        return <code dangerouslySetInnerHTML={{ __html: language }}></code>;
+            const instance = generateDiffFile(
+                "oldFileName",
+                oldText,
+                "newFileName",
+                newText,
+                lang,
+                lang,
+            );
+            instance.initRaw();
+            return instance;
+        } catch (error) {
+            console.error("Error generating diff:", error);
+            return null;
+        }
     };
 
-    render = () => {
+    const diffFile = useMemo(() => getDiffFile(), [oldText, newText, lang]);
+
+    if (oldText === newText) {
         return (
-            <ReactDiffViewer
-                oldValue={oldCode}
-                newValue={newCode}
-                splitView={true}
-                renderContent={this.syntaxHighlight}
-            />
+            <div className="p-4 text-center text-gray-500 border rounded-md">
+                No differences found - both texts are identical
+            </div>
         );
-    };
-}
+    }
 
-export default Diff;
+    return (
+        <DiffView
+            diffFile={diffFile || undefined}
+            diffViewWrap={false}
+            diffViewAddWidget
+            renderWidgetLine={({ onClose }) => {
+                return (
+                    <div
+                        style={{
+                            display: "flex",
+                            border: "1px solid",
+                            padding: "10px",
+                            justifyContent: "space-between",
+                        }}
+                    >
+                        123
+                        <button
+                            style={{
+                                border: "1px solid",
+                                borderRadius: "2px",
+                                padding: "4px 8px",
+                            }}
+                            onClick={onClose}
+                        >
+                            close
+                        </button>
+                    </div>
+                );
+            }}
+            diffViewTheme={"light"}
+            diffViewHighlight={true}
+            diffViewMode={DiffModeEnum.Split}
+        />
+    );
+}

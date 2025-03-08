@@ -9,6 +9,9 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@git-diff-view/file": "^0.0.25",
+    "@git-diff-view/react": "^0.0.25",
+    "@monaco-editor/react": "^4.7.0",
     "@tailwindcss/vite": "^4.0.6",
     "@tanstack/react-query": "^5.66.5",
     "@tanstack/react-query-devtools": "^5.66.5",
@@ -20,6 +23,8 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.476.0",
+    "monaco-editor": "^0.52.2",
+    "monaco-jsx-syntax-highlight": "^1.2.0",
     "prismjs": "^1.29.0",
     "react": "^19.0.0",
     "react-diff-viewer": "^3.1.1",

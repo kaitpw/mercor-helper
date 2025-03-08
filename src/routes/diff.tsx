@@ -3,6 +3,7 @@ import Diff from "@/components/Diff";
 import { store } from "@/lib/diff-store";
 import { useStore } from "@tanstack/react-store";
 import Editor from "@monaco-editor/react";
+import { detectLanguage } from "@/lib/language-detector";
 
 export const Route = createFileRoute("/diff")({
     component: RouteComponent,
@@ -15,12 +16,18 @@ function RouteComponent() {
     const isLocked = useStore(store, (state) => state.isLocked);
 
     const languages = [
-        { value: "javascript", label: "JavaScript" },
-        { value: "typescript", label: "TypeScript" },
-        { value: "tsx", label: "TSX" },
-        { value: "jsx", label: "JSX" },
-        { value: "python", label: "Python" },
-        { value: "json", label: "JSON" },
+        { value: "json" },
+        { value: "typescript" },
+        { value: "javascript" },
+        { value: "tsx" },
+        { value: "jsx" },
+        { value: "python" },
+        { value: "sql" },
+        { value: "html" },
+        { value: "css" },
+        { value: "markdown" },
+        { value: "bash" },
+        { value: "shell" },
     ];
 
     return (
@@ -38,8 +45,8 @@ function RouteComponent() {
                         }))}
                     className="w-full p-2 border rounded-md"
                 >
-                    {languages.map(({ value, label }) => (
-                        <option key={value} value={value}>{label}</option>
+                    {languages.map(({ value }) => (
+                        <option key={value} value={value}>{value}</option>
                     ))}
                 </select>
             </div>
@@ -66,10 +73,15 @@ function RouteComponent() {
                         value={oldText}
                         onChange={(value) => {
                             if (!isLocked) {
+                                const detectedLang = detectLanguage(
+                                    value || "",
+                                    languages,
+                                );
                                 store.setState((state) => ({
                                     ...state,
                                     oldText: value || "",
                                     newText: value || "",
+                                    lang: detectedLang,
                                 }));
                             }
                         }}

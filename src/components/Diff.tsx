@@ -1,8 +1,7 @@
-import { DiffFile, DiffModeEnum, DiffView } from "@git-diff-view/react";
+import { DiffModeEnum, DiffView } from "@git-diff-view/react";
 import { generateDiffFile } from "@git-diff-view/file";
+import { useMemo } from "react";
 import "@git-diff-view/react/styles/diff-view.css";
-import { useEffect, useMemo, useRef } from "react";
-
 interface Props {
     oldText: string;
     newText: string;
@@ -44,37 +43,40 @@ export default function Diff({ oldText, newText, lang }: Props) {
     }
 
     return (
-        <DiffView
-            diffFile={diffFile || undefined}
-            diffViewWrap={false}
-            diffViewAddWidget
-            renderWidgetLine={({ onClose }) => {
-                return (
-                    <div
-                        style={{
-                            display: "flex",
-                            border: "1px solid",
-                            padding: "10px",
-                            justifyContent: "space-between",
-                        }}
-                    >
-                        123
-                        <button
-                            style={{
-                                border: "1px solid",
-                                borderRadius: "2px",
-                                padding: "4px 8px",
-                            }}
-                            onClick={onClose}
-                        >
-                            close
-                        </button>
-                    </div>
-                );
-            }}
-            diffViewTheme={"light"}
-            diffViewHighlight={true}
-            diffViewMode={DiffModeEnum.Split}
-        />
+        <div id="ABOVEWRAPPER">
+            <DiffView
+                diffFile={diffFile || undefined}
+                diffViewWrap={false}
+                // diffViewAddWidget
+                // renderWidgetLine={({ onClose }) => {
+                //     return (
+                //         <div
+                //             style={{
+                //                 display: "flex",
+                //                 border: "1px solid",
+                //                 padding: "10px",
+                //                 justifyContent: "space-between",
+                //             }}
+                //         >
+                //             123
+                //             <button
+                //                 style={{
+                //                     border: "1px solid",
+                //                     borderRadius: "2px",
+                //                     padding: "4px 8px",
+                //                 }}
+                //                 onClick={onClose}
+                //             >
+                //                 close
+                //             </button>
+                //         </div>
+                //     );
+                // }}
+                diffViewFontSize={10}
+                diffViewTheme={"light"}
+                diffViewHighlight={true}
+                diffViewMode={DiffModeEnum.Split}
+            />
+        </div>
     );
 }

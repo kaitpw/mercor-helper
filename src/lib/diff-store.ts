@@ -1,4 +1,4 @@
-import { Effect, Store } from "@tanstack/store";
+import { Store } from "@tanstack/store";
 
 export const store = new Store({
     oldText: temp1(),

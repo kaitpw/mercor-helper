@@ -1,0 +1,13 @@
+.diffContainer {
+  /* This selector ensures styles within this component don't leak outside */
+  :global {
+    /* Import the raw CSS file from the library */
+    @import '@git-diff-view/react/styles/diff-view.css';
+  }
+  
+  /* Make sure the styles only apply to elements within our component */
+  & [class*="diff-"],
+  & [class*="diff_"] {
+    /* Leave the original styles intact but scope them to this component */
+  }
+}
